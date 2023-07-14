@@ -1,0 +1,30 @@
+services:
+  web:
+    build: .
+    command: python /app/manage.py runserver
+    ports:
+      - 8080:8080
+    volumes:
+      - .:/app
+    depends_on:
+      - mvp_db
+
+  mvp_db:
+    image: postgres:13
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - "POSTGRES_HOST_AUTH_METHOD=trust"
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+    ports:
+      - 3000:3000
+
+volumes:
+  postgres_data:
+
